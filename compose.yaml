@@ -1,9 +1,21 @@
 services:
-  postgres:
+  postgres-container:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_DB=StroyMaster'
+      - 'POSTGRES_PASSWORD=hack101cool'
+      - 'POSTGRES_USER=postgres'
     ports:
       - '5432'
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/StroyMaster
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: hack101cool
+    depends_on:
+      - postgres-container
